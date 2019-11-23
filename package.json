@@ -1,0 +1,16 @@
+{
+  "name": "ts-em-api-base",
+  "version": "1.0.0",
+  "description": "Base for a typescript, express and mongodb web API",
+  "main": "src/index.ts",
+  "author": "Arthur C. Philippe",
+  "license": "MIT",
+  "dependencies": {
+    "@types/express": "^4.17.2",
+    "@types/mongoose": "^5.5.32",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.12",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.7.2"
+  }
+}
