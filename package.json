@@ -7,7 +7,7 @@
     "license": "MIT",
     "scripts": {
         "start": "tsc && node -r tsconfig-paths/register dist/index.js",
-        "build": "tsc",
+        "build": "tsc -d",
         "build:check": "tsc --noEmit"
     },
     "dependencies": {
@@ -23,8 +23,5 @@
     },
     "files": [
         "dist"
-    ],
-    "publishConfig": {
-        "access": "public"
-    }
+    ]
 }
