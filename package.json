@@ -7,7 +7,7 @@
     "license": "MIT",
     "scripts": {
         "start": "tsc && node -r tsconfig-paths/register dist/index.js",
-        "build": "tsc -d",
+        "build": "tsc --declaration --declarationMap",
         "build:check": "tsc --noEmit"
     },
     "dependencies": {
