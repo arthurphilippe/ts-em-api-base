@@ -1,0 +1,45 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "dvscode-jest-tests",
+            "type": "node",
+            "request": "launch",
+            "runtimeArgs": [
+                "--inspect-brk=9229",
+                "${workspaceRoot}/node_modules/.bin/jest",
+                "-i"
+            ],
+            // "stopOnEntry": true,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "port": 9229,
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceRoot}/dist/**/*"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "dvscode-jest-tests",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--inspect-brk",
+                "${workspaceRoot}/node_modules/.bin/jest",
+                "--runInBand"
+            ],
+            "windows": {
+                "args": [
+                    "--inspect-brk",
+                    "${workspaceRoot}/node_modules/jest/bin/jest.js",
+                    "--runInBand",
+                    "--config",
+                    "${workspaceRoot}/jest.config.json"
+                ],
+            },
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        }
+    ]
+}

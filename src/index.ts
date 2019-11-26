@@ -22,4 +22,23 @@ export default class App {
             next();
         };
     }
+
+    public async start() {}
+}
+
+if (!module.parent) {
+    let conf: config.Base = {
+        port: 9000,
+        database: new config.Database({
+            // url: "mongo://root:example@localhost",
+            host: "localhost",
+            port: "27017",
+            username: "root",
+            password: "example",
+            database: "test",
+            srv: false,
+            options: ["retryWrites=true", "authSource=admin"],
+        }),
+    };
+    let app = new App(conf);
 }

@@ -6,9 +6,9 @@
     "author": "Arthur C. Philippe",
     "license": "MIT",
     "scripts": {
-        "start": "tsc && node -r tsconfig-paths/register dist/index.js",
-        "build": "tsc --declaration --declarationMap",
-        "build:check": "tsc --noEmit"
+        "build": "tsc --declaration --declarationMap -p tsconfig-prod.json",
+        "start": "tsc -p tsconfig-prod.json && node -r tsconfig-paths/register dist/index.js",
+        "build:check": "tsc --noEmit -p tsconfig-prod.json"
     },
     "dependencies": {
         "express": "^4.17.1",
@@ -17,11 +17,55 @@
     },
     "devDependencies": {
         "@types/express": "^4.17.2",
+        "@types/jest": "^24.0.23",
         "@types/mongoose": "^5.5.32",
-        "typescript": "^3.7.2",
-        "ts-node": "^8.5.2"
+        "jest": "^24.9.0",
+        "jest-junit": "^9.0.0",
+        "ts-jest": "^24.2.0",
+        "ts-node": "^8.5.2",
+        "typescript": "^3.7.2"
     },
     "files": [
         "dist"
-    ]
+    ],
+    "jest": {
+        "transform": {
+            "^.+\\.ts?$": "ts-jest"
+        },
+        "testRegex": "(/tests/.*|\\.(test|spec))\\.(ts|tsx)$",
+        "testPathIgnorePatterns": [
+            "/dist/",
+            "/node_modules/"
+        ],
+        "moduleFileExtensions": [
+            "ts",
+            "js",
+            "json"
+        ],
+        "collectCoverage": false,
+        "collectCoverageFrom": [
+            "src/**/*.{ts,tsx}"
+        ],
+        "coverageReporters": [
+            "html",
+            "json"
+        ],
+        "reporters": [
+            "default",
+            "jest-junit"
+        ],
+        "testEnvironment": "node",
+        "moduleNameMapper": {
+            "^@/(.*)$": "<rootDir>/src/$1"
+        }
+    },
+    "jest-junit": {
+        "suiteName": "jest tests",
+        "outputDirectory": "./reports/jest",
+        "outputName": "junit.xml",
+        "classNameTemplate": "{classname}",
+        "titleTemplate": "{title}",
+        "ancestorSeparator": " › ",
+        "usePathForSuiteName": "true"
+    }
 }
