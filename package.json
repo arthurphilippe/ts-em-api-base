@@ -55,10 +55,7 @@
             "default",
             "jest-junit"
         ],
-        "testEnvironment": "node",
-        "moduleNameMapper": {
-            "^@/(.*)$": "<rootDir>/src/$1"
-        }
+        "testEnvironment": "node"
     },
     "jest-junit": {
         "suiteName": "jest tests",

@@ -1,4 +1,4 @@
-import * as config from "@/models/Config";
+import * as config from "./Config";
 
 it("should generate a correct URL", () => {
     let conf: config.Base = {

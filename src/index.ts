@@ -1,7 +1,7 @@
 import * as express from "express";
-import * as config from "@/models/Config";
+import * as config from "./models/Config";
 import * as http from "http";
-import Context from "@/models/Context";
+import Context from "./models/Context";
 
 export { config };
 

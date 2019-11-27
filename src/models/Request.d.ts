@@ -1,4 +1,4 @@
-import Context from "@/models/Context";
+import Context from "./Context";
 
 declare global {
     namespace Express {
