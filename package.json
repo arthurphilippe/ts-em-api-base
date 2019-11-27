@@ -8,7 +8,8 @@
     "scripts": {
         "build": "tsc --declaration --declarationMap -p tsconfig-prod.json",
         "start": "tsc -p tsconfig-prod.json && node -r tsconfig-paths/register dist/index.js",
-        "build:check": "tsc --noEmit -p tsconfig-prod.json"
+        "build:check": "tsc --noEmit -p tsconfig-prod.json",
+        "test": "jest"
     },
     "dependencies": {
         "express": "^4.17.1",
