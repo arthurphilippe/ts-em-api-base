@@ -25,3 +25,6 @@ jobs:
           yarn test
         env:
           CI: "true"
+      - name: Check existience of type definitions
+        run: |
+          stat dist/index.d.ts
