@@ -1,7 +1,7 @@
 import * as config from "./Config";
 
 it("should generate a correct URL", () => {
-    let conf: config.Base = {
+    let conf = new config.Base({
         port: 80,
         database: new config.Database({
             host: "localhost",
@@ -12,7 +12,7 @@ it("should generate a correct URL", () => {
             srv: false,
             options: ["retryWrites=true", "authSource=admin"],
         }),
-    };
+    });
 
     expect(conf.database.url).toEqual(
         "mongodb://root:example@localhost:27017/test?retryWrites=true&authSource=admin"
@@ -30,7 +30,7 @@ it("should generate a correct URL", () => {
 });
 
 it("should fail to create URL", () => {
-    let conf: config.Base = {
+    let conf = new config.Base({
         port: 80,
         database: new config.Database({
             // host: "localhost",
@@ -41,7 +41,7 @@ it("should fail to create URL", () => {
             // srv: false,
             // options: ["retryWrites=true", "authSource=admin"],
         }),
-    };
+    });
 
     expect(() => conf.database.url).toThrow();
 });

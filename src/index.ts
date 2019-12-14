@@ -74,7 +74,7 @@ export default class Api {
 }
 
 if (!module.parent) {
-    let conf: config.Base = {
+    let conf = new config.Base({
         port: 9000,
         database: new config.Database({
             // url: "mongo://root:example@localhost",
@@ -90,7 +90,7 @@ if (!module.parent) {
             connectMS: 3000,
             socketMS: 3000,
         },
-    };
+    });
     (async () => {
         try {
             let app = new Api(conf);

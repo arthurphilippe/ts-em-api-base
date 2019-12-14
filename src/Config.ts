@@ -58,11 +58,23 @@ export class Database {
     }
 }
 
-export interface Base {
-    port: number;
-    database: Database;
+export class Base {
+    port: number = 9000;
+    database: Database = new Database({
+        host: "localhost",
+        port: "27017",
+        username: "root",
+        password: "example",
+        database: "test",
+        srv: false,
+        options: ["retryWrites=true", "authSource=admin"],
+    });
     timeout: {
         connectMS: number;
         socketMS: number;
-    };
+    } = { connectMS: 5000, socketMS: 5000 };
+
+    constructor(init: Partial<Base>) {
+        Object.assign(this, init);
+    }
 }
