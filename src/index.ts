@@ -1,14 +1,17 @@
 import * as express from "express";
-import * as config from "./models/Config";
 import * as http from "http";
-import Context from "./models/Context";
+import * as mongoose from "mongoose";
+
+import * as config from "./Config";
+import Context from "./Context";
 
 export { config };
 
-export default class App {
+export default class Api {
     public expressApp: express.Application;
     public context: Context;
     private server?: http.Server;
+    private mongoose: typeof mongoose;
 
     constructor(config: config.Base) {
         this.context = { config: config };
@@ -23,7 +26,51 @@ export default class App {
         };
     }
 
-    public async start() {}
+    /**
+     * @note Mongoose and mongodb timeout setting do not seem to work at all.
+     */
+    private async mongooseConnect() {
+        console.log("Connecting to database, default timeout 30s.");
+        this.mongoose = await mongoose.connect(this.context.config.database.url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            connectTimeoutMS: this.context.config.timeout.connectMS,
+            socketTimeoutMS: this.context.config.timeout.socketMS,
+        });
+        this.mongoose.connection.on("error", this.handleMongooseError);
+        return;
+    }
+
+    private async handleMongooseError(err: any) {
+        console.error("Connection error, stopping...");
+        this.stop();
+    }
+
+    private async handleHttpServerError(err: Error) {
+        console.error("Server error, stopping...");
+        console.error(err);
+        this.stop();
+    }
+
+    async stop() {
+        await this.mongoose.connection.close();
+        if (this.server) {
+            this.server.close();
+        }
+        console.log("Stopped.");
+    }
+
+    public serve() {
+        this.server = this.expressApp.listen(this.context.config.port, () => {
+            console.log("Now serving on port: " + this.context.config.port);
+        });
+        this.server.on("error", this.handleHttpServerError);
+    }
+
+    public async start() {
+        await this.mongooseConnect();
+        this.serve();
+    }
 }
 
 if (!module.parent) {
@@ -39,6 +86,17 @@ if (!module.parent) {
             srv: false,
             options: ["retryWrites=true", "authSource=admin"],
         }),
+        timeout: {
+            connectMS: 3000,
+            socketMS: 3000,
+        },
     };
-    let app = new App(conf);
+    (async () => {
+        try {
+            let app = new Api(conf);
+            await app.start();
+        } catch (err) {
+            console.error(err);
+        }
+    })();
 }

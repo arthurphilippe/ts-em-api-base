@@ -19,7 +19,20 @@ export class Database {
 
         let base = this.srv ? "mongodb+srv://" : "mongodb://";
 
-        this._url = base + this.username + ":" + this.password + "@" + this.host + ":" + this.port;
+        if (!this.username || !this.password || !this.host || !this.port || !this.database)
+            throw new Error("Cannot generate mongo url. At least one field is missing");
+
+        this._url =
+            base +
+            this.username +
+            ":" +
+            this.password +
+            "@" +
+            this.host +
+            ":" +
+            this.port +
+            "/" +
+            this.database;
 
         if (this.options && this.options.length) {
             let first = true;
@@ -48,4 +61,8 @@ export class Database {
 export interface Base {
     port: number;
     database: Database;
+    timeout: {
+        connectMS: number;
+        socketMS: number;
+    };
 }
