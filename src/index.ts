@@ -10,11 +10,15 @@ export { config };
 export default class Api {
     public expressApp: express.Application;
     public context: Context;
+    private dbconfig: config.Database;
     private server?: http.Server;
-    private mongoose: typeof mongoose;
+    private mongoose?: typeof mongoose;
 
     constructor(config: config.Base) {
-        this.context = { config: config };
+        this.dbconfig = config.database;
+        config.database = null;
+        this.context = { config: config, dbConnected: false };
+        this.mongoose = undefined;
         this.expressApp = express();
         this.expressApp.use(this.addContextMiddleware());
     }
@@ -31,12 +35,13 @@ export default class Api {
      */
     private async mongooseConnect() {
         console.log("Connecting to database, default timeout 30s.");
-        this.mongoose = await mongoose.connect(this.context.config.database.url, {
+        this.mongoose = await mongoose.connect(this.dbconfig.url, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             connectTimeoutMS: this.context.config.timeout.connectMS,
             socketTimeoutMS: this.context.config.timeout.socketMS,
         });
+        this.context.dbConnected = true;
         this.mongoose.connection.on("error", this.handleMongooseError);
         return;
     }
@@ -68,7 +73,7 @@ export default class Api {
     }
 
     public async start() {
-        await this.mongooseConnect();
+        if (this.dbconfig) await this.mongooseConnect();
         this.serve();
     }
 }
