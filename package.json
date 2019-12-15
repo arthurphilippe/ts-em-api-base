@@ -1,6 +1,6 @@
 {
     "name": "ts-em-api-base",
-    "version": "1.0.0",
+    "version": "1.1.1",
     "description": "Base for a typescript, express and mongodb web API",
     "main": "src/index.ts",
     "author": "Arthur C. Philippe",
