@@ -96,12 +96,17 @@ if (!module.parent) {
             socketMS: 3000,
         },
     });
+
     (async () => {
         try {
             let app = new Api(conf);
             await app.start();
         } catch (err) {
             console.error(err);
+            process.exit(1);
         }
-    })();
+    })().catch((err) => {
+        console.error(err);
+        process.exit(1);
+    });
 }

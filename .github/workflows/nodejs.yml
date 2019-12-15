@@ -22,7 +22,13 @@ jobs:
           yarn build
       - name: yarn test
         run: |
-          yarn test
+          yarn test --coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./reports/jest/junit.xml
+          fail_ci_if_error: true
         env:
           CI: "true"
       - name: Check existience of type definitions
