@@ -8,7 +8,6 @@ export default function middlewareErrorResponse(
     res: Response,
     next: NextFunction
 ) {
-    debugger;
     if (err instanceof ErrorResponse) {
         err.discharge(res);
         next();

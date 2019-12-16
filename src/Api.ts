@@ -11,6 +11,8 @@ import * as mongoose from "mongoose";
 import * as config from "./Config";
 import Context from "./Context";
 import * as middleware from "./middleware";
+import Component from "./Component";
+import * as intake from "./intake";
 
 export default class Api {
     public expressApp: express.Application;
@@ -18,14 +20,18 @@ export default class Api {
     private dbconfig: config.Database;
     private server?: http.Server;
     private mongoose?: typeof mongoose;
+    private components: Component[];
+    private componentIntakes: ((comp: Component, ctx: Context) => void)[];
 
     constructor(config: config.Base) {
         this.dbconfig = config.database;
         config.database = null;
-        this.context = { config: config, dbConnected: false };
-        this.mongoose = undefined;
         this.expressApp = express();
+        this.context = { config: config, dbConnected: false, expressApp: this.expressApp };
+        this.mongoose = undefined;
         this.addGlobalMiddlewares();
+        this.components = [];
+        this.componentIntakes = [intake.middlewares];
     }
 
     private addGlobalMiddlewares() {
@@ -35,6 +41,23 @@ export default class Api {
     private addErrorMiddlewares() {
         this.expressApp.use(middleware.ErrorMongoose);
         this.expressApp.use(middleware.ErrorResponse);
+    }
+
+    public addComponent(comp: Component) {
+        this.componentIntakes.forEach((intakeFunction) => {
+            intakeFunction(comp, this.context);
+        });
+        this.components.push(comp);
+    }
+
+    public addComponentIntake(proc: (comp: Component, ctx: Context) => void) {
+        this.componentIntakes.push(proc);
+    }
+
+    public markComponentsReady() {
+        this.components.forEach((comp) => {
+            intake.router(comp, this.context);
+        });
     }
 
     /**
@@ -83,6 +106,7 @@ export default class Api {
     }
 
     public preStart() {
+        this.markComponentsReady();
         this.addErrorMiddlewares();
     }
 

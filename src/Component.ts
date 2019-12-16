@@ -3,8 +3,7 @@ import * as config from "./Config";
 
 export default interface Component {
     name: string;
-    permissions: string;
-    globalMiddleware: express.RequestHandler[];
+    middlewares: express.RequestHandler[];
     router: express.Router;
 }
 

@@ -71,14 +71,14 @@ it("should return 400 using MongoError", async (done) => {
     await request(api.expressApp)
         .get("/one")
         .expect(400)
-        .end((err) => {
+        .catch((err) => {
             if (err) done(err);
         });
 
     await request(api.expressApp)
         .get("/two")
         .expect(400)
-        .end((err) => {
+        .catch((err) => {
             if (err) done(err);
         });
 
