@@ -55,6 +55,7 @@
             "json"
         ],
         "reporters": [
+            "default",
             "jest-junit"
         ],
         "testEnvironment": "node"
