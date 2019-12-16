@@ -26,7 +26,6 @@ export default class Api {
         this.mongoose = undefined;
         this.expressApp = express();
         this.addGlobalMiddlewares();
-        this.addErrorMiddlewares();
     }
 
     private addGlobalMiddlewares() {
@@ -35,6 +34,7 @@ export default class Api {
 
     private addErrorMiddlewares() {
         this.expressApp.use(middleware.ErrorMongoose);
+        this.expressApp.use(middleware.ErrorResponse);
     }
 
     /**
@@ -82,8 +82,13 @@ export default class Api {
         this.server.on("error", this.handleHttpServerError);
     }
 
+    public preStart() {
+        this.addErrorMiddlewares();
+    }
+
     public async start() {
+        this.preStart();
         if (this.dbconfig) await this.mongooseConnect();
-        this.serve();
+        if (this.context.config.port) this.serve();
     }
 }
