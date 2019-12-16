@@ -10,6 +10,7 @@ import * as mongoose from "mongoose";
  */
 import * as config from "./Config";
 import Context from "./Context";
+import * as middleware from "./middleware";
 
 export default class Api {
     public expressApp: express.Application;
@@ -24,20 +25,25 @@ export default class Api {
         this.context = { config: config, dbConnected: false };
         this.mongoose = undefined;
         this.expressApp = express();
-        this.expressApp.use(this.addContextMiddleware());
+        this.addGlobalMiddlewares();
+        this.addErrorMiddlewares();
     }
 
-    private addContextMiddleware() {
-        return (req: express.Request, _res: express.Response, next: express.NextFunction) => {
-            req.context = this.context;
-            next();
-        };
+    private addGlobalMiddlewares() {
+        this.expressApp.use(middleware.AddContext(this.context));
+    }
+
+    private addErrorMiddlewares() {
+        this.expressApp.use(middleware.ErrorMongoose);
     }
 
     /**
      * @note Mongoose and mongodb timeout setting do not seem to work at all.
      */
     private async mongooseConnect() {
+        mongoose.set("useNewUrlParser", true);
+        mongoose.set("useFindAndModify", false);
+        mongoose.set("useCreateIndex", true);
         console.log("Connecting to database, default timeout 30s.");
         this.mongoose = await mongoose.connect(this.dbconfig.url, {
             useNewUrlParser: true,
