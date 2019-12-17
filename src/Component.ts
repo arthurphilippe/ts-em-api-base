@@ -8,5 +8,5 @@ export default interface Component {
 }
 
 export interface GeneratesComponent {
-    generateComponent: (config: config.Base) => Component;
+    (config: config.Base): Component;
 }
