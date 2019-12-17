@@ -58,7 +58,16 @@ export class Database {
     }
 }
 
-export class Base {
+export interface IBase {
+    port: number;
+    database: Database;
+    timeout: {
+        connectMS: number;
+        socketMS: number;
+    };
+}
+
+export class Base implements IBase {
     port: number = 9000;
     database: Database = new Database({
         host: "localhost",
