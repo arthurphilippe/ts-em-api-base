@@ -1,5 +1,8 @@
 import Api from "./Api";
-import * as config from "./Config";
-
 export default Api;
+
+import * as config from "./Config";
 export { config };
+
+import Component, { GeneratesComponent } from "./Component";
+export { Component, GeneratesComponent };
