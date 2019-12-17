@@ -23,7 +23,7 @@ export default class Api {
     private components: Component[];
     private componentIntakes: ((comp: Component, ctx: Context) => void)[];
 
-    constructor(config: config.Base) {
+    constructor(config: config.IBase) {
         this.dbconfig = config.database;
         config.database = null;
         this.expressApp = express();
